@@ -1,16 +1,14 @@
 const supabaseUrl = mustGet("SUPABASE_URL").replace(/\/+$/, "");
-const supabaseKey = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+const supabaseKey =
+  process.env.SUPABASE_API_KEY ||
+  process.env.SUPABASE_ANON_KEY ||
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  "";
 const tableName = process.env.SUPABASE_KEEPALIVE_TABLE || "";
 const bucketName = process.env.SUPABASE_KEEPALIVE_BUCKET || "";
 const objectPath = process.env.SUPABASE_KEEPALIVE_OBJECT || "";
 
-const headers = supabaseKey
-  ? {
-      apikey: supabaseKey,
-      Authorization: `Bearer ${supabaseKey}`,
-    }
-  : {};
-
+const headers = supabaseKey ? buildSupabaseHeaders(supabaseKey) : {};
 const checks = [];
 
 if (tableName) {
@@ -55,6 +53,16 @@ for (const check of checks) {
     const body = await safeBody(response);
     throw new Error(`${check.name} failed with HTTP ${response.status}${body ? `: ${body}` : ""}`);
   }
+}
+
+function buildSupabaseHeaders(key) {
+  const headers = { apikey: key };
+
+  if (!key.startsWith("sb_publishable_") && !key.startsWith("sb_secret_")) {
+    headers.Authorization = `Bearer ${key}`;
+  }
+
+  return headers;
 }
 
 function mustGet(name) {

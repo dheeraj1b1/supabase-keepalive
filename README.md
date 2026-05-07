@@ -15,13 +15,13 @@ Create these repository secrets:
 - `SUPABASE_URL`: your project URL, for example `https://qdcnpuncureormyezvbp.supabase.co`
 - `SUPABASE_API_KEY`: your Supabase publishable key, or the legacy anon key if your project still uses legacy keys
 
-Optional repository variables:
+Recommended repository variables for this project:
 
-- `SUPABASE_KEEPALIVE_TABLE`: table to read one row from
-- `SUPABASE_KEEPALIVE_BUCKET`: bucket name for a stored certificate
-- `SUPABASE_KEEPALIVE_OBJECT`: path to one object inside that bucket
+- `SUPABASE_KEEPALIVE_TABLE`: `keepalive_ping`
+- `SUPABASE_KEEPALIVE_BUCKET`: `certificates`
+- `SUPABASE_KEEPALIVE_OBJECT`: `07_infosys_genai_for_all.pdf`
 
-If you set the bucket variable, also set the object variable.
+The bucket/object values above touch one small public certificate PDF with a `HEAD` request, so the workflow confirms Storage is reachable without downloading the file.
 
 ## Schedule
 

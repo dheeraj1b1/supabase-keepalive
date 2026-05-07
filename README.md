@@ -13,7 +13,7 @@ It does not install dependencies and it performs only one or two lightweight req
 Create these repository secrets:
 
 - `SUPABASE_URL`: your project URL, for example `https://qdcnpuncureormyezvbp.supabase.co`
-- `SUPABASE_ANON_KEY`: your Supabase anon key
+- `SUPABASE_API_KEY`: your Supabase publishable key, or the legacy anon key if your project still uses legacy keys
 
 Optional repository variables:
 
@@ -29,4 +29,4 @@ The workflow runs daily at `03:17 UTC`, which is `08:47 IST`. You can also run i
 
 ## Notes
 
-Use the anon key when possible. Only use a service role key if your keepalive table or storage object is intentionally private and cannot be read with anon access.
+Use a publishable or legacy anon key when possible. Only use a secret or service role key if your keepalive target is intentionally private and you understand that elevated keys can access more of your project.

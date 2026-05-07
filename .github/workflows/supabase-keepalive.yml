@@ -24,7 +24,7 @@ jobs:
         run: node scripts/supabase-keepalive.mjs
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          SUPABASE_API_KEY: ${{ secrets.SUPABASE_API_KEY }}
           SUPABASE_KEEPALIVE_TABLE: ${{ vars.SUPABASE_KEEPALIVE_TABLE }}
           SUPABASE_KEEPALIVE_BUCKET: ${{ vars.SUPABASE_KEEPALIVE_BUCKET }}
           SUPABASE_KEEPALIVE_OBJECT: ${{ vars.SUPABASE_KEEPALIVE_OBJECT }}

@@ -1,12 +1,13 @@
-# Supabase Keepalive
+# Portfolio Keepalive
 
-Tiny GitHub Actions utility that pings a Supabase project once per day so a lightly used portfolio database and storage bucket continue receiving activity.
+Tiny GitHub Actions utility that pings a Supabase project and a Streamlit ATS app so a lightly used portfolio stack keeps receiving activity.
 
-It does not install dependencies and it performs only one or two lightweight requests:
+It does not install dependencies and it performs lightweight requests:
 
-- one optional table read with `limit=1`
-- one optional storage object `HEAD` request
-- a fallback project API ping if no table or storage target is configured
+- one optional Supabase table read with `limit=1`
+- one optional Supabase Storage object `HEAD` request
+- one public GET request to the Streamlit ATS app
+- a fallback Supabase project API ping if no Supabase table or Storage target is configured
 
 ## GitHub setup
 
@@ -23,9 +24,13 @@ Recommended repository variables for this project:
 
 The bucket/object values above touch one small public certificate PDF with a `HEAD` request, so the workflow confirms Storage is reachable without downloading the file.
 
+The workflow also pings this ATS app directly:
+
+- `https://my-ats-007.streamlit.app/`
+
 ## Schedule
 
-The workflow runs daily at `03:17 UTC`, which is `08:47 IST`. You can also run it manually from the GitHub Actions tab.
+The workflow runs twice daily at `03:17 UTC` and `15:17 UTC`, which is `08:47 IST` and `20:47 IST`. You can also run it manually from the GitHub Actions tab.
 
 ## Notes
 

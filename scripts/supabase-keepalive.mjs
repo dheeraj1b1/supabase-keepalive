@@ -45,6 +45,7 @@ for (const url of externalUrls) {
       redirect: "manual",
       headers: { "user-agent": "portfolio-keepalive/1.0" },
     },
+    allowFetchError: true,
     allowNonServerError: true,
   });
 }
@@ -60,7 +61,22 @@ if (!checks.length) {
 
 for (const check of checks) {
   const startedAt = Date.now();
-  const response = await fetch(check.url, check.options);
+  let response;
+
+  try {
+    response = await fetch(check.url, check.options);
+  } catch (error) {
+    const elapsedMs = Date.now() - startedAt;
+    const message = error?.cause?.message || error?.message || "fetch failed";
+
+    if (check.allowFetchError) {
+      console.log(`${check.name}: fetch attempted, ${message} in ${elapsedMs}ms`);
+      continue;
+    }
+
+    throw error;
+  }
+
   const elapsedMs = Date.now() - startedAt;
   const ok =
     response.ok ||

@@ -28,4 +28,4 @@ jobs:
           SUPABASE_KEEPALIVE_TABLE: ${{ vars.SUPABASE_KEEPALIVE_TABLE }}
           SUPABASE_KEEPALIVE_BUCKET: ${{ vars.SUPABASE_KEEPALIVE_BUCKET }}
           SUPABASE_KEEPALIVE_OBJECT: ${{ vars.SUPABASE_KEEPALIVE_OBJECT }}
-          STREAMLIT_KEEPALIVE_URL: https://my-ats-007.streamlit.app/
+          STREAMLIT_KEEPALIVE_URL: https://my-ats-007.streamlit.app/_stcore/health

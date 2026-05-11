@@ -40,7 +40,12 @@ for (const url of externalUrls) {
   checks.push({
     name: `url:${url}`,
     url,
-    options: { method: "GET" },
+    options: {
+      method: "GET",
+      redirect: "manual",
+      headers: { "user-agent": "portfolio-keepalive/1.0" },
+    },
+    allowNonServerError: true,
   });
 }
 
@@ -57,7 +62,10 @@ for (const check of checks) {
   const startedAt = Date.now();
   const response = await fetch(check.url, check.options);
   const elapsedMs = Date.now() - startedAt;
-  const ok = response.ok || (check.allowClientError && response.status < 500);
+  const ok =
+    response.ok ||
+    (check.allowClientError && response.status < 500) ||
+    (check.allowNonServerError && response.status < 500);
 
   console.log(`${check.name}: HTTP ${response.status} in ${elapsedMs}ms`);
 

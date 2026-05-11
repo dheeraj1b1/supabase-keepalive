@@ -7,6 +7,10 @@ const supabaseKey =
 const tableName = process.env.SUPABASE_KEEPALIVE_TABLE || "";
 const bucketName = process.env.SUPABASE_KEEPALIVE_BUCKET || "";
 const objectPath = process.env.SUPABASE_KEEPALIVE_OBJECT || "";
+const externalUrls = collectUrls(
+  process.env.STREAMLIT_KEEPALIVE_URL,
+  process.env.KEEPALIVE_URLS,
+);
 
 const headers = supabaseKey ? buildSupabaseHeaders(supabaseKey) : {};
 const checks = [];
@@ -29,6 +33,14 @@ if (bucketName && objectPath) {
     name: `storage:${bucketName}/${objectPath}`,
     url: `${supabaseUrl}/storage/v1/object/${encodeURIComponent(bucketName)}/${cleanPath}`,
     options: { method: "HEAD", headers },
+  });
+}
+
+for (const url of externalUrls) {
+  checks.push({
+    name: `url:${url}`,
+    url,
+    options: { method: "GET" },
   });
 }
 
@@ -63,6 +75,13 @@ function buildSupabaseHeaders(key) {
   }
 
   return headers;
+}
+
+function collectUrls(...values) {
+  return values
+    .flatMap((value) => (value || "").split(/[\n,]/))
+    .map((value) => value.trim())
+    .filter(Boolean);
 }
 
 function mustGet(name) {

@@ -47,6 +47,7 @@ for (const url of externalUrls) {
     },
     allowFetchError: true,
     allowNonServerError: true,
+    logWebsiteEvidence: true,
   });
 }
 
@@ -85,6 +86,10 @@ for (const check of checks) {
 
   console.log(`${check.name}: HTTP ${response.status} in ${elapsedMs}ms`);
 
+  if (check.logWebsiteEvidence) {
+    await logWebsiteEvidence(check, response);
+  }
+
   if (!ok) {
     const body = await safeBody(response);
     throw new Error(`${check.name} failed with HTTP ${response.status}${body ? `: ${body}` : ""}`);
@@ -108,6 +113,24 @@ function collectUrls(...values) {
     .filter(Boolean);
 }
 
+async function logWebsiteEvidence(check, response) {
+  const location = response.headers.get("location");
+  if (location) {
+    console.log(`${check.name}: redirects to ${new URL(location, check.url).href}`);
+    return;
+  }
+
+  const contentType = response.headers.get("content-type") || "";
+  if (!contentType.includes("text/html")) {
+    console.log(`${check.name}: content-type ${contentType || "unknown"}`);
+    return;
+  }
+
+  const body = await safeBody(response, 5000);
+  const title = body.match(/<title[^>]*>([^<]*)<\/title>/i)?.[1]?.trim();
+  console.log(`${check.name}: title ${title || "not found"}`);
+}
+
 function mustGet(name) {
   const value = process.env[name];
   if (!value) {
@@ -116,9 +139,9 @@ function mustGet(name) {
   return value;
 }
 
-async function safeBody(response) {
+async function safeBody(response, maxLength = 500) {
   try {
-    return (await response.text()).slice(0, 500);
+    return (await response.text()).slice(0, maxLength);
   } catch {
     return "";
   }

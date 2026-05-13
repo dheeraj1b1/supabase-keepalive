@@ -15,12 +15,17 @@ concurrency:
 jobs:
   ping:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 12
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Ping Supabase and ATS app
+      - name: Install browser wake dependencies
+        run: |
+          npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+
+      - name: Ping Supabase and ATS front door
         run: node scripts/supabase-keepalive.mjs
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
@@ -29,3 +34,8 @@ jobs:
           SUPABASE_KEEPALIVE_BUCKET: ${{ vars.SUPABASE_KEEPALIVE_BUCKET }}
           SUPABASE_KEEPALIVE_OBJECT: ${{ vars.SUPABASE_KEEPALIVE_OBJECT }}
           STREAMLIT_KEEPALIVE_URL: https://my-ats-007.streamlit.app/_stcore/health
+
+      - name: Wake Streamlit ATS app in browser
+        run: npm run wake:streamlit
+        env:
+          STREAMLIT_APP_URL: https://my-ats-007.streamlit.app/

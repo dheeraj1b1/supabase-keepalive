@@ -1,0 +1,11 @@
+{
+  "name": "portfolio-keepalive",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "wake:streamlit": "node scripts/wake-streamlit.mjs"
+  },
+  "dependencies": {
+    "playwright": "^1.52.0"
+  }
+}

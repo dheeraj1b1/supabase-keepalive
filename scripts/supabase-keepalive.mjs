@@ -8,6 +8,7 @@ const tableName = process.env.SUPABASE_KEEPALIVE_TABLE || "";
 const bucketName = process.env.SUPABASE_KEEPALIVE_BUCKET || "";
 const objectPath = process.env.SUPABASE_KEEPALIVE_OBJECT || "";
 const externalUrls = collectUrls(
+  "https://sdet-study-playground.dheeraj474.workers.dev/",
   process.env.STREAMLIT_KEEPALIVE_URL,
   process.env.KEEPALIVE_URLS,
 );

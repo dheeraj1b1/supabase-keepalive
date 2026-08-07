@@ -11,7 +11,7 @@ It performs lightweight requests:
 - one browser visit to the Streamlit ATS app
 - a fallback Supabase project API ping if no Supabase table or Storage target is configured
 
-## GitHub setup
+## GitHub setup 
 
 Create these repository secrets:
 

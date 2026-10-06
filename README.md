@@ -43,7 +43,7 @@ Cloudflare Access is not enabled on the connected Cloudflare account yet. After 
 
 - `sdet-study-playground.dheeraj474.workers.dev`
 
-Then add an allow policy for only the owner email address.
+Then add an allow policy for only the owner email address..
 
 ## Notes
 
